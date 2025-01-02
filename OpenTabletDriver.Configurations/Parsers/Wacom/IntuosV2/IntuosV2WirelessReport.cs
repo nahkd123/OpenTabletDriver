@@ -4,7 +4,7 @@ using OpenTabletDriver.Plugin.Tablet;
 
 namespace OpenTabletDriver.Configurations.Parsers.Wacom.IntuosV2
 {
-    public struct IntuosV2WirelessReport : ITabletReport, IEraserReport, ITiltReport, IProximityReport
+    public struct IntuosV2WirelessReport : ITabletReport, IEraserReport, ITiltReport, IProximityReport, IAuxReport
     {
         public IntuosV2WirelessReport(byte[] report)
         {
@@ -30,6 +30,17 @@ namespace OpenTabletDriver.Configurations.Parsers.Wacom.IntuosV2
             Eraser = report[1].IsBitSet(4);
             NearProximity = report[1].IsBitSet(5);
             HoverDistance = report[14];
+
+            AuxButtons = new bool[] {
+                report[282].IsBitSet(0),
+                report[282].IsBitSet(1),
+                report[282].IsBitSet(2),
+                report[282].IsBitSet(3),
+                report[282].IsBitSet(4),
+                report[282].IsBitSet(5),
+                report[282].IsBitSet(6),
+                report[282].IsBitSet(7)
+            };
         }
 
         public byte[] Raw { get; set; }
@@ -40,5 +51,6 @@ namespace OpenTabletDriver.Configurations.Parsers.Wacom.IntuosV2
         public bool NearProximity { get; set; }
         public uint HoverDistance { get; set; }
         public Vector2 Tilt { get; set; }
+        public bool[] AuxButtons { get; set; }
     }
 }
